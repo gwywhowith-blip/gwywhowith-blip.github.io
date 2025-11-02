@@ -1,0 +1,247 @@
+z📄 formative4.html
+This file contains the HTML structure, the sign-up form, the table to display the data, and links to the JavaScript file and an external stylesheet (for basic styling).
+
+HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Sign-Up and Data Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        /* User-interactivity: Button hover effect */
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* User-interactivity: Table row hover effect */
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+        .header-interactivity {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        /* User-interactivity: Header click effect - changes text color */
+        .header-interactivity:active {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="page-header" class="header-interactivity">Sign-Up Form</h1>
+    <p>Click the header above to see a color change effect!</p>
+
+    <form id="signUpForm">
+        <div>
+            <label for="idNumber">ID Number:</label>
+            <input type="text" id="idNumber" required>
+        </div>
+        <div>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" required>
+        </div>
+        <div>
+            <label for="middleName">Middle Name:</label>
+            <input type="text" id="middleName">
+        </div>
+        <div>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" required>
+        </div>
+        <div>
+            <label for="gender">Gender:</label>
+            <select id="gender" required>
+                <option value="">-- Select Gender --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div>
+            <label for="birthday">Birthday:</label>
+            <input type="date" id="birthday" required>
+        </div>
+        <button type="submit" id="saveButton">Save Data</button>
+    </form>
+
+    <hr>
+
+    <h2>Registered Users</h2>
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>ID Number</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Birthday</th>
+            </tr>
+        </thead>
+        <tbody id="usersTableBody">
+            </tbody>
+    </table>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+🚀 script.js
+This file contains the JavaScript logic, including the array to store data, the function to handle the save action, the DOM event, and the dynamic update to the webpage.
+
+JavaScript
+
+// **Array to organize data** - Stores all registered users
+let registeredUsers = [];
+
+// **Variable to store user input or data** - An object that will hold the data of the current user
+let currentUserData = {};
+
+/**
+ * **Function that performs an action** - Gathers form data, validates it,
+ * stores it in the array, and updates the table.
+ * @param {Event} event - The form submission event.
+ */
+function saveUserData(event) {
+    // Prevent the default form submission behavior (which causes a page reload)
+    event.preventDefault();
+
+    // Gather data from the form inputs
+    const idNumber = document.getElementById('idNumber').value;
+    const firstName = document.getElementById('firstName').value;
+    const middleName = document.getElementById('middleName').value;
+    const lastName = document.getElementById('lastName').value;
+    const gender = document.getElementById('gender').value;
+    const birthday = document.getElementById('birthday').value;
+
+    // Store the gathered data in the currentUserData **variable** (an object)
+    currentUserData = {
+        id: idNumber,
+        first: firstName,
+        middle: middleName,
+        last: lastName,
+        gender: gender,
+        bday: birthday
+    };
+
+    // Add the new user data to the **registeredUsers array**
+    registeredUsers.push(currentUserData);
+
+    // Update the webpage content dynamically
+    displayUsersInTable();
+
+    // Clear the form after saving
+    document.getElementById('signUpForm').reset();
+}
+
+/**
+ * **Action that updates the webpage content dynamically** -
+ * Renders the data from the registeredUsers array into the HTML table.
+ */
+function displayUsersInTable() {
+    const tableBody = document.getElementById('usersTableBody');
+    // Clear the existing content of the table body
+    tableBody.innerHTML = '';
+
+    // Loop through the **registeredUsers array** and create a row for each user
+    registeredUsers.forEach(user => {
+        const row = tableBody.insertRow();
+
+        // 1. ID Number
+        let cell = row.insertCell();
+        cell.textContent = user.id;
+
+        // 2. Full Name (Formatted)
+        cell = row.insertCell();
+        // Construct full name, only adding middle name if it exists
+        const fullName = user.middle ? `${user.first} ${user.middle} ${user.last}` : `${user.first} ${user.last}`;
+        cell.textContent = fullName;
+
+        // 3. Gender
+        cell = row.insertCell();
+        cell.textContent = user.gender;
+
+        // 4. Birthday
+        cell = row.insertCell();
+        cell.textContent = user.bday;
+    });
+}
+
+// --- **DOM Event Listeners** ---
+
+// 1. **DOM event (Button click)**: Attach the saveUserData function to the form's submit event.
+// When the form is submitted (e.g., by clicking the "Save Data" button), saveUserData runs.
+document.getElementById('signUpForm').addEventListener('submit', saveUserData);
+
+// 2. **DOM event (Element Click and dynamic style change)**: Add an interactive feature
+// to the page header, which changes its color on click.
+document.getElementById('page-header').addEventListener('click', function() {
+    const currentColor = this.style.color;
+    // Toggle the color between black and a dynamic shade of green
+    this.style.color = (currentColor === 'rgb(40, 167, 69)' || currentColor === '') ? '#28a745' : 'black';
+});
+To use these files:
+
+Create a folder on your computer.
+
+Save the HTML code above into a file named formative4.html inside that folder.
+
+Save the JavaScript code above into a file named script.js inside the same folder.
+
+Open formative4.html in your web browser.
+
+You will have a working sign-up form that saves data and displays it in a table, along with hover effects on the button and table rows, and a click-based color change effect on the main header!
+
+Would you like me to elaborate on any of the JavaScript concepts, such as how the DOM events work or how the data is stored in the array?
