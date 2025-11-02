@@ -1,7 +1,6 @@
 const usersData = [];
 
 function saveUserData(event) {
-
     event.preventDefault();
 
     const idNumber = document.getElementById('idNumber').value;
@@ -16,11 +15,10 @@ function saveUserData(event) {
         return;
     }
 
-
     const newUser = {
         id: idNumber,
         first: firstName,
-        middle: middleName || 'N/A',
+        middle: middleName || 'N/A', // Use 'N/A' if empty
         last: lastName,
         gender: gender,
         bday: birthday
@@ -51,10 +49,11 @@ function updateTableDisplay() {
 const saveButton = document.getElementById('saveButton');
 saveButton.addEventListener('mouseover', () => {
     saveButton.style.backgroundColor = '#2ecc71';
-    saveButton.addEventListener('mouseout', () => {
-        saveButton.style.backgroundColor = '#5cb85c';
-    });
+});
 
+saveButton.addEventListener('mouseout', () => {
+    saveButton.style.backgroundColor = '#5cb85c';
+});
 
-    const form = document.getElementById('signUpForm');
-    form.addEventListener('submit', saveUserData);
+const form = document.getElementById('signUpForm');
+form.addEventListener('submit', saveUserData);
